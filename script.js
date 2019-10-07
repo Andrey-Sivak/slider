@@ -24,7 +24,7 @@ let _json = {
     }
 };
 
-/*class Slider {
+class Slider {
 
   constructor (options) {
     this.data = options.data;
@@ -37,8 +37,6 @@ let _json = {
   // выводит html слайдов
   outputImg (data) {
 
-
-
     let nxtSibl = document.getElementById('prev');
       
     for(let key in data) {
@@ -47,7 +45,7 @@ let _json = {
 
       let span = document.createElement('span');
       span.className = 'num';
-      span.innerHTML = `${key}/${Object.keys(_json).length}`;
+      span.innerHTML = `${key}/${Object.keys(data).length}`;
 
       let img = document.createElement('img');
       img.setAttribute('src', `img/${data[key].name}.jpg`);
@@ -126,99 +124,18 @@ let _json = {
     this.outputDots(this.data);
     this.showSlides(this.slideIndex);
   }
-}*/
+}
 
 window.onload = function() {
 
- /* let slider = new Slider({
+  let slider = new Slider({
     data: _json,
     wrapperImg: '#slider',
     wrapper: '#slirer__wrap',
     wrapperDots: '#dots'
   });
 
-  slider.initSlider();*/
+  slider.initSlider();
 
-  (function() {
-
-    let _json = {
-      "1": {
-        "name": "Владимир Кузнецов",
-        "position": "Директор магазина",
-        "comment": "Оборудовал здесь свой магазин — очень функционально получилось,. Быстро и недорого",
-        "img": "http://www.gkgorsia.ru/wp-content/uploads/2016/01/otz1.png"
-      },
-      "2": {
-        "name": "Дмитрий Иванов",
-        "position": "Управляющий",
-        "comment": "Хотели бы поблагодарить всех сотрудников за внимательное отношение к нашему заказу! Очень довольны результатом!",
-        "img": "http://www.gkgorsia.ru/wp-content/uploads/2016/01/otz2.png"
-      },
-      "3": {
-        "name": "Анна Владимирова",
-        "position": "Директор",
-        "comment": "Я оставила заявку сайте и осталась очень довольна. Со мной менеджер связался сразу, выставили счет через час, до транспортной компании доставили через день. Все оборудование чистое аккуратное. Очень довольна компанией. Спасибо большое менеджерам. Буду вашу фирму всем рекомендовать.",
-        "img": "http://www.gkgorsia.ru/wp-content/uploads/2016/01/otz3.png"
-      },
-      "4": {
-        "name": "Алексей Михайлов",
-        "position": "Менеджер",
-        "comment": "Цены низкие, по моему опыту самые низкие в Москве. Продавцы помогли подобрать оборудование, собрали комплект прилавков и витрин. Забирали мы сами, поэтому проблем с доставкой не было. Спасибо!",
-        "img": "http://www.gkgorsia.ru/wp-content/uploads/2016/01/otz4.png"
-      }    
-    };
-
-    const wrap = document.createElement('div');
-    wrap.classList.add('slider__wrap');
-    const slider = document.createElement('div');
-    slider.classList.add('slider');
-
-    for(let key in _json) {
-      const divWrapItem = document.createElement('div');
-      divWrapItem.className = 'slider__item slider__fade';
-
-      const divWrapImg = document.createElement('div');
-      divWrapImg.classList.add('slider__img');
-      const img = document.createElement('img');
-      img.setAttribute('src', _json[key].img);
-      img.classList.add('img');
-      divWrapImg.appendChild(img);
-
-      const divWrapText = document.createElement('div');
-      const name = document.createElement('p');
-      name.classList.add('slider__name');
-      name.innerHTML = _json[key].name;
-      const position = document.createElement('p');
-      position.classList.add('slider__position');
-      position.innerHTML = _json[key].position;
-      const comment = document.createElement('p');
-      comment.classList.add('slider__comment');
-      comment.innerHTML = _json[key].comment;
-      divWrapText.appendChild(name);
-      divWrapText.appendChild(position);
-      divWrapText.appendChild(comment);
-
-      divWrapItem.appendChild(divWrapImg);
-      divWrapItem.appendChild(divWrapText);
-
-      slider.appendChild(divWrapItem);
-    }
-
-    const prev = document.createElement('a');
-    prev.classList.add('prev')
-    prev.innerHTML = '&#10094;';
-
-    const next = document.createElement('a');
-    next.classList.add('next')
-    next.innerHTML = '&#10095;';
-
-    slider.appendChild('prev');
-    slider.appendChild('next');
-
-
-
-  })()
-
-}
-
+};
 
