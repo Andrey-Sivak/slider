@@ -3,19 +3,74 @@
 class Slider {
 
     constructor( options ) {
+        this.isAnimationEnd = true;
         this.selectors = {
             wrap: document.querySelector(options.wrap),
             slides: document.querySelector(options.wrap).children,
             prevArrow: document.querySelector(options.prevArrow),
             nextArrow: document.querySelector(options.nextArrow)
         };
-        this.privates = {
+        /*this.default = {
             'autoplay': true,
             'autoplayDelay': 3000,
             'touch': true,
             'pauseOnFocus': true,
             'pauseOnHover': true
-        };
+        };*/
+        // this.settings = Object.assign( this.default, options );
+        this.position = 0;
+        this.maxPosition = this.selectors.slides.length;
+    }
+
+    prevSlide() {
+
+        if( !this.isAnimationEnd ) {
+            return;
+        }
+        this.isAnimationEnd = false;
+
+        --this.position;
+
+        if( this.position < 0 ) {
+            this.selectors.wrap.classList.add('s-notransition');
+            this.selectors.wrap.style['transform'] = `translateX(-${this.maxPosition}00%)`;
+            this.position = this.maxPosition - 1;
+        }
+
+        setTimeout( () => {
+            this.selectors.wrap.classList.remove('s-notransition');
+            this.selectors.wrap.style['transform'] = `translateX(-${this.position}00%)`;
+        }, 10);
+
+        this.selectors.wrap.addEventListener('transitionend', () => {
+            this.isAnimationEnd = true;
+        });
+    }
+
+    nextSlide() {
+
+        if( !this.isAnimationEnd ) {
+            return;
+        }
+        this.isAnimationEnd = false;
+
+        if( this.position < this.maxPosition ) {
+            ++this.position;
+        }
+
+        this.selectors.wrap.classList.remove('s-notransition');
+        this.selectors.wrap.style['transform'] = `translateX(-${this.position}00%)`;
+
+        this.selectors.wrap.addEventListener('transitionend', () => {
+            if( this.position >= this.maxPosition ) {
+                this.selectors.wrap.style['transform'] = 'translateX(0)';
+                this.selectors.wrap.classList.add('s-notransition');
+                this.position = 0;
+            }
+
+            this.isAnimationEnd = true;
+        });
+
     }
 
     // create switch arrows
@@ -38,9 +93,19 @@ class Slider {
         }
     }
 
+    build() {
+        this.selectors.prevArrow.addEventListener('click', () => {
+            this.prevSlide();
+        });
+        this.selectors.nextArrow.addEventListener('click', () => {
+            this.nextSlide();
+        })
+    }
+
     init() {
+        this.selectors.wrap.appendChild(this.selectors.wrap.children[0].cloneNode(true));
+        this.build();
         this.createArrows();
-        // console.log(this.privates.autoplay);
     }
 
 }
