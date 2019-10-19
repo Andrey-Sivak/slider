@@ -1,5 +1,7 @@
 'use strict';
 
+import { Timer } from "./timer";
+
 class Slider {
 
     constructor( options ) {
@@ -10,16 +12,18 @@ class Slider {
             prevArrow: document.querySelector(options.prevArrow),
             nextArrow: document.querySelector(options.nextArrow)
         };
-        /*this.default = {
+        this.default = {
             'autoplay': true,
             'autoplayDelay': 3000,
             'touch': true,
             'pauseOnFocus': true,
             'pauseOnHover': true
-        };*/
-        // this.settings = Object.assign( this.default, options );
+        };
+        this.settings = Object.assign( this.default, options );
         this.position = 0;
         this.maxPosition = this.selectors.slides.length;
+        this.timer;
+        this.nextSlide = this.nextSlide.bind(this);
     }
 
     prevSlide() {
@@ -94,6 +98,10 @@ class Slider {
     }
 
     build() {
+        if( this.settings.autoplay === true ) {
+            this.timer = new Timer( this.nextSlide, this.settings.autoplayDelay );
+            this.timer.begin();
+        }
         this.selectors.prevArrow.addEventListener('click', () => {
             this.prevSlide();
         });

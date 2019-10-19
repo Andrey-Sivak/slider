@@ -1,4 +1,4 @@
-import { Slider } from "./new-script";
+import { Slider } from "./slider";
 
 
 window.addEventListener('load', () => {
