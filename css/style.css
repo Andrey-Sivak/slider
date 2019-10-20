@@ -91,3 +91,12 @@
 .s-notransition {
     transition: 0s;
 }
+
+@media(max-width: 1020px) {
+    .slider__wrap {
+        max-width: 95vw;
+    }
+    .img {
+        height: 50vw;
+    }
+}
