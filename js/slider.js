@@ -24,6 +24,16 @@ class Slider {
         this.maxPosition = this.selectors.slides.length;
         this.timer;
         this.nextSlide = this.nextSlide.bind(this);
+        this.startTouchPosition = this.startTouchPosition.bind(this);
+        this.touchMoveTo = this.touchMoveTo.bind(this);
+        this.touchCoordinates = {
+            'xDown': 0,
+            'yDown': 0,
+            'xUp': 0,
+            'yUp': 0,
+            'xDiff': 0,
+            'yDiff': 0,
+        }
     }
 
     prevSlide() {
@@ -74,7 +84,33 @@ class Slider {
 
             this.isAnimationEnd = true;
         });
+    }
 
+    startTouchPosition(e) {
+        this.touchCoordinates['xDown'] = e.touches[0].clientX;
+        this.touchCoordinates['yDown'] = e.touches[0].clientY;
+    }
+
+    touchMoveTo(e) {
+        if( !this.touchCoordinates['xDown'] || !this.touchCoordinates['yDown'] ) {
+            return;
+        }
+
+        this.touchCoordinates['xUp'] = e.touches[0].clientX;
+        this.touchCoordinates['yUp'] = e.touches[0].clientY;
+
+        this.touchCoordinates['xDiff'] = this.touchCoordinates['xDown'] - this.touchCoordinates['xUp'];
+        this.touchCoordinates['yDiff'] = this.touchCoordinates['yDown'] - this.touchCoordinates['yUp'];
+        if( Math.abs( this.touchCoordinates['xDiff'] ) > Math.abs(this.touchCoordinates['yDiff'] ) ) {
+            if( this.touchCoordinates['xDiff'] > 0 ) {
+                this.nextSlide();
+            } else {
+                this.prevSlide();
+            }
+        }
+
+        this.touchCoordinates['xDown'] = 0;
+        this.touchCoordinates['yDown'] = 0;
     }
 
     // create switch arrows
@@ -117,6 +153,11 @@ class Slider {
             this.selectors.wrap.addEventListener('mouseleave', () => {
                this.timer.become();
             })
+        }
+
+        if( this.settings.touch ) {
+            this.selectors.wrap.addEventListener('touchstart', this.startTouchPosition, false);
+            this.selectors.wrap.addEventListener('touchmove', this.touchMoveTo, false);
         }
     }
 
