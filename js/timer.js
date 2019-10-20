@@ -6,7 +6,8 @@ class Timer {
         this.timerId;
         this.start;
         this.callback = callback;
-        this.remaining = delay;
+        this.delay = delay;
+        this.remaining = this.delay;
 
         this.resume = this.resume.bind(this);
         this.pause = this.pause.bind(this);

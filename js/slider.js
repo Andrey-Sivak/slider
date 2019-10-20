@@ -107,7 +107,17 @@ class Slider {
         });
         this.selectors.nextArrow.addEventListener('click', () => {
             this.nextSlide();
-        })
+        });
+
+        if( this.settings.autoplay && this.settings.pauseOnHover ) {
+            this.selectors.wrap.addEventListener('mouseenter', () => {
+                this.timer.pause();
+            });
+
+            this.selectors.wrap.addEventListener('mouseleave', () => {
+               this.timer.become();
+            })
+        }
     }
 
     init() {
