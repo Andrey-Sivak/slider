@@ -10,14 +10,16 @@ class Slider {
             wrap: document.querySelector(options.wrap),
             slides: document.querySelector(options.wrap).children,
             prevArrow: document.querySelector(options.prevArrow),
-            nextArrow: document.querySelector(options.nextArrow)
+            nextArrow: document.querySelector(options.nextArrow),
+            dotsWrap: document.getElementById('dots')
         };
         this.default = {
             'autoplay': true,
             'autoplayDelay': 3000,
             'touch': true,
             'pauseOnFocus': true,
-            'pauseOnHover': true
+            'pauseOnHover': true,
+            'dots': true
         };
         this.settings = Object.assign( this.default, options );
         this.position = 0;
@@ -59,6 +61,8 @@ class Slider {
         this.selectors.wrap.addEventListener('transitionend', () => {
             this.isAnimationEnd = true;
         });
+
+        this.switchDotsList();
     }
 
     nextSlide() {
@@ -84,6 +88,8 @@ class Slider {
 
             this.isAnimationEnd = true;
         });
+
+        this.switchDotsList();
     }
 
     startTouchPosition(e) {
@@ -133,11 +139,64 @@ class Slider {
         }
     }
 
+    showSwitchDots() {
+        if( this.settings.dots ) {
+            for( let i = 0, len = this.selectors.wrap.children.length; i < len; i++ ) {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                dot.dataset.number = i;
+
+                this.selectors.dotsWrap.appendChild(dot);
+                dot.addEventListener('click', () => {
+                    if( i > this.position ) {
+                        let j = i;
+                        while( j > this.position ) {
+                            this.position = j - 1;
+                            this.nextSlide();
+                            j--;
+                        }
+                    }
+                    if( i < this.position ) {
+                        let j = i;
+                        while( j < this.position ) {
+                            this.position = j + 1;
+                            this.prevSlide();
+                            j++;
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    addDataAttributeToSlides() {
+        for( let i = 0, len = this.selectors.wrap.children.length; i < len; i++ ) {
+            this.selectors.wrap.children[i].dataset.slide = i;
+        }
+
+        this.switchDotsList();
+    }
+
+    switchDotsList() {
+        for( let i = 0, len = this.selectors.dotsWrap.children.length; i < len; i++ ) {
+            if( this.selectors.dotsWrap.children[i].dataset !== this.position ) {
+                this.selectors.dotsWrap.children[i].classList.remove('active');
+            }
+        }
+
+        if( this.position >= this.maxPosition ) {
+            this.selectors.dotsWrap.children[0].classList.add('active');
+        } else {
+            this.selectors.dotsWrap.children[this.position].classList.add('active');
+        }
+    }
+
     build() {
         if( this.settings.autoplay === true ) {
             this.timer = new Timer( this.nextSlide, this.settings.autoplayDelay );
             this.timer.begin();
         }
+
         this.selectors.prevArrow.addEventListener('click', () => {
             this.prevSlide();
         });
@@ -162,6 +221,8 @@ class Slider {
     }
 
     init() {
+        this.showSwitchDots();
+        this.addDataAttributeToSlides();
         this.selectors.wrap.appendChild(this.selectors.wrap.children[0].cloneNode(true));
         this.build();
         this.createArrows();
